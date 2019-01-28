@@ -28,7 +28,6 @@ public class TroubleshootingInjector implements ApplicationContextAware {
         return new Fizzbuzz("derp", -1L);
     }
 
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
