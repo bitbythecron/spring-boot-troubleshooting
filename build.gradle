@@ -1,0 +1,85 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+    }
+}
+
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'org.springframework.boot'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+configurations {
+    dev
+}
+
+ext['javax-validation.version'] = '2.0.1.Final'
+dependencies {
+    compile(
+            'ch.qos.logback:logback-classic:1.2.3'
+            ,'com.github.oshi:oshi-core:3.5.0'
+            ,'com.github.ben-manes.caffeine:caffeine:2.6.2'
+            ,'org.slf4j:jul-to-slf4j:1.7.25'
+            ,'org.apache.logging.log4j:log4j-to-slf4j:2.9.1'
+            ,'org.apache.commons:commons-lang3:3.7'
+            ,'org.codehaus.groovy:groovy:2.4.12'
+            ,'io.jsonwebtoken:jjwt:0.9.0'
+            ,'org.hibernate:hibernate-validator:6.0.7.Final'
+            ,'commons-io:commons-io:2.6'
+            ,'org.springframework.boot:spring-boot-starter-actuator'
+            ,'org.springframework.boot:spring-boot-starter-data-jpa'
+            ,'com.amazonaws:aws-java-sdk:1.11.264'
+            ,'org.apache.commons:commons-text:1.2'
+            ,'org.liquibase:liquibase-core:3.5.5'
+            ,'org.hibernate:hibernate-spatial:5.0.12.Final'
+            ,'com.google.guava:guava:23.0'
+            ,'mysql:mysql-connector-java:8.0.14'
+            ,'com.netflix.hystrix:hystrix-core:1.5.12'
+            ,'commons-beanutils:commons-beanutils-core:1.8.3'
+    )
+
+    testCompile(
+            'junit:junit:4.12'
+            ,'org.mockito:mockito-core:2.23.0'
+            ,'com.typesafe.akka:akka-testkit_2.12:2.5.16'
+            ,'org.springframework.boot:spring-boot-starter-test:1.5.8.RELEASE'
+    )
+
+    dev('org.springframework.boot:spring-boot-devtools')
+
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+String buildName = 'spring-boot-troubleshooting'
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
+
+jar {
+    baseName = buildName
+}
+
+bootRun {
+    if(project.hasProperty('debugMode')) {
+        jvmArgs = [ "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005" ]
+    }
+
+    classpath = sourceSets.main.runtimeClasspath + configurations.dev
+}
+

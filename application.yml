@@ -1,0 +1,31 @@
+logging:
+  config: 'logback.groovy'
+troubleshooting:
+  machine:
+    id: 12345
+    key: 4567
+  maxChildRestarts: 10
+spring:
+  cache:
+    type: none
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/troubleshooting_db?useSSL=false&nullNamePatternMatchesAll=true&serverTimezone=UTC
+    username: root
+    password: 12345
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.spatial.dialect.mysql.MySQL5InnoDBSpatialDialect
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.dialect: org.hibernate.spatial.dialect.mysql.MySQL5InnoDBSpatialDialect
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.hbm2ddl.auto: validate
